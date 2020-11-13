@@ -1,34 +1,61 @@
-function btn_hover_bottom_border(head) {
+function btn_hover_bottom_border(head, animition_type = 'width', transition_delay = '0s') {
     var key = $(head);
-
-
     key.append('<span></span>');
     var span_kay = $(head + '>span');
+
+    var span_height = span_kay.css('height');
+    var key_temp_width = key.innerWidth() - key.width() + 'px';
 
     key.css({
         'position': 'relative',
         'z-index': '1',
     })
 
+
+
+    var span_width = 'calc(100% - ' + key_temp_width + ')';
+    var transition = transition_delay + ' all ease-in-out';
+
+    setTimeout(function() {
+        span_kay.css({
+            'transition': transition,
+        })
+    }, 10);
+
     span_kay.css({
         'position': 'absolute',
         'z-index': '2',
         'left': '50%',
-        'width': '0%',
         'transform': 'translate(-50%, 0%)',
+        'transition': 'none',
     })
 
-    key.addClass('btn_hover_bottom_border');
-    span_kay.addClass('btn_hover_bottom_border_span');
+    if (animition_type == 'height') {
+        span_kay.css({
+            'height': '0px',
+            'width': span_width,
+        })
+    } else {
+        span_kay.css({
+            'height': span_height,
+            'width': '0px',
+        })
+    }
 
     key.hover(function() {
-        var key_width = key.innerWidth() - key.width();
-        $(this).children('.btn_hover_bottom_border_span').css({
-            'width': 'calc(100% - ' + key_width + 'px)',
+        $(this).children('span').css({
+            'width': span_width,
+            'height': span_height,
         })
     }, function() {
-        $(this).children('.btn_hover_bottom_border_span').css({
-            'width': '0%',
-        })
-    });
+        if (animition_type == 'height') {
+            $(this).children('span').css({
+                'height': '0px',
+            })
+        } else {
+            $(this).children('span').css({
+                'width': '0px',
+            })
+        }
+    })
 }
